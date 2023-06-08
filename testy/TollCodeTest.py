@@ -1,11 +1,14 @@
 import unittest
 
-from TOLL.TOLL_algorithm import TOLL
+from TOLL.TollAlgorithm import TollAlgorithm
 
-class TOLLCodeTest(unittest.TestCase):
+
+class TollCodeTest(unittest.TestCase):
     def test_something(self):
         self.assertEqual(True, False)  # add assertion here
 
+    def test_(self):
+        TOLL = TollAlgorithm
 
 
 if __name__ == '__main__':
