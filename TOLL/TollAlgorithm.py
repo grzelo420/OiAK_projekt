@@ -78,18 +78,19 @@ class TollAlgorithm:
         equations = []
         j = -2
         k = 1
-        #liczba_str = str(hex_num)     nie trzeba zamieniac na str() bo to juz jest string
-        #print(liczba_str)
+        # liczba_str = str(hex_num)     nie trzeba zamieniac na str() bo to juz jest string
+        # print(liczba_str)
         decnumber = int(hex_num, 16)
-        numberlength = len(hex_num)
+        print('typ decnumber', type(decnumber))
+        number_length = len(hex_num)
 
-        for i in range(0, numberlength, 2):
+        for i in range(0, number_length, 2):
             byte = hex_num[i:i + 2]
             # print(byte)
             digit = int(byte, 16)
-            #print(digit)
+            # print(digit)
             if digit != 0:
-                power = (numberlength - i - 2) * 4
+                power = (number_length - i - 2) * 4
                 if digit != 255:
                     equations.append(digit)
                     equations.append(power)
@@ -134,26 +135,41 @@ liczba2 = 1095546312524
 
 TOLL = TollAlgorithm
 
-liczba_hex = "%0.14X" % liczba1
-liczba_bin = TOLL.array_to_string(TOLL.string_to_binary(liczba_hex, "hex"), "bin")
-liczba_dec = TOLL.array_to_string(TOLL.string_to_binary(liczba_hex, "hex"), "dec")
+liczba_hex = "%0.14X" % liczba1  # string
 
-print(type(TOLL.string_to_binary(liczba_hex, "hex")))
+tablica_bin = TOLL.string_to_binary(liczba_hex, "hex")  # list
 
-print('hex:', liczba_hex, type(liczba_hex))
-print('dec:', liczba_dec)
-print('dec:', liczba_bin)
-print('ile bitow:', len(liczba_bin))
-print('rownanie:', TOLL.hex_to_coefficients(liczba_hex))
-
+liczba_bin = TOLL.array_to_string(tablica_bin, "bin")  # string
+liczba_dec = TOLL.array_to_string(tablica_bin, "dec")  # string
+equation = TOLL.hex_to_coefficients(liczba_hex)
+print('=========================================')
+print('dlugosc liczby w bitach:', len(liczba_bin))
+print()
+print('liczba hex:', liczba_hex)
+print('typ struktury:', type(liczba_hex))
+print()
+print('liczba dec:', liczba_dec)
+print('typ struktury:', type(liczba_dec))
+print()
+print('liczba dec:', liczba_bin)
+print('typ struktury:', type(liczba_bin))
+print()
+print('tablica binarna do operacji shift:', tablica_bin)
+print('typ struktury:', type(tablica_bin))
+print()
+print('rownanie:', equation)
+print('typ struktury:', type(equation))
+print()
+print('2, 4 i 6 blok liczby w dec:')
+print(equation[1], equation[3], equation[5])
 # rownania = hex_na_rownania(liczba_hex)
 # print(str(liczba_hex))
-#TollAlgorithnm.rownania = TollAlgorithnm.hex_to_coefficients(liczba_hex)
+# TollAlgorithnm.rownania = TollAlgorithnm.hex_to_coefficients(liczba_hex)
 # print(TollAlgorithnm.rownania)
 
-#liczba_hex = "%0.14X" % liczba2
+# liczba_hex = "%0.14X" % liczba2
 # print(str(liczba_hex))
-#equations = TollAlgorithnm.hex_to_coefficients(liczba_hex)
+# equations = TollAlgorithnm.hex_to_coefficients(liczba_hex)
 # print(equations)
 
 # print(rownania[3])
