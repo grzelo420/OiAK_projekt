@@ -114,16 +114,115 @@ class TollAlgorithm:
         return equations
 
     @staticmethod
-    def shift_left(array, shift_count):
+    def CSD(array):
+        array_length = len(array)
+        tabaddsub = []  # [i][1] tablica na dodaj/odejmij [i][2] tablica na shifts
+        tabshift = []
+        i = 0
+        seq_counter = 0
+        while i < len(array):
+            if array[i] == 1:
+                # jeżeli mamy jedynkę i potem zera to do tablicy wchodzi 1 i ilość przesunięć
+                if i + 1 < len(array) and array[i + 1] == 0:
+                    tabaddsub.append(1)
+                    tabshift.append(array_length - i)
+                    i += 1
+                elif i + 1 < len(array) and array[i + 1] == 1:
+                    tabaddsub.append(1)
+                    tabshift.append(array_length - i + 1)
+                    while i + 1 < len(array) and array[i + 1] == 1:
+                        i += 1
+                    tabaddsub.append(-1)
+                    tabshift.append(array_length - i)
+                    i += 1
+                elif i + 1 == len(array):  # Jeśli ostatnia pozycja to '1'
+                    tabaddsub.append(1)
+                    tabshift.append(0)
+                    i += 1
+            elif array[i] == 0:
+                i += 1
 
-        shifted_array = array[shift_count:] + ['0'] * shift_count
+        return tabshift, tabaddsub
 
-        return shifted_array
+    @staticmethod
+    def printCSD(przesuniecia, dodajodejmij):
 
-    # hex_number = '0000'
-    # binary_number = hex_to_binary(hex_number)
-    # print(binary_number)
+        iterator = 0
+        while iterator < len(przesuniecia):
+            if iterator > 0:
+                print("+", end=" ")
+            print("(", dodajodejmij[iterator], "<<", przesuniecia[iterator], end=" ) ")
+            iterator += 1
+        print()
 
+
+TOLL = TollAlgorithm
+
+
+tabshift, tabaddsub = TOLL.CSD([1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0])
+TOLL.printCSD(tabshift, tabaddsub)
+tabshift, tabaddsub = TOLL.CSD([1, 1, 0, 1, 1, 0, 0, 1])
+TOLL.printCSD(tabshift, tabaddsub)
+tabshift, tabaddsub = TOLL.CSD([1, 0, 1, 1, 1, 0, 0, 1])
+TOLL.printCSD(tabshift, tabaddsub)
+tabshift, tabaddsub = TOLL.CSD([1, 0, 1, 0, 0, 0, 0, 1])
+TOLL.printCSD(tabshift, tabaddsub)
+
+
+def common_subexpression(bin1, bin2):
+    # Zapisujemy długość obu liczb
+    len_bin1 = len(bin1)
+    len_bin2 = len(bin2)
+
+    # Zaczynamy od pustego najdłuższego wspólnego podwyrażenia
+    max_subexpression = []
+
+    # Przesuwamy bin1 w stosunku do bin2
+    for i in range(-(len_bin1 - 1), len_bin2):
+        subexpression = []
+        # Porównujemy bity
+        for j in range(len_bin2):
+            if i + j < 0 or i + j >= len_bin1:
+                continue
+            if bin1[i + j] == bin2[j]:
+                subexpression.append(bin2[j])
+            else:
+                if len(subexpression) > len(max_subexpression):
+                    max_subexpression = list(subexpression)
+                subexpression = []
+        if len(subexpression) > len(max_subexpression):
+            max_subexpression = list(subexpression)
+
+        # Przerywamy pętlę jeśli nie jest możliwe znalezienie dłuższego podwyrażenia
+        if len(max_subexpression) >= len_bin2 - i:
+            break
+
+    # Zwracamy wynik jako listę
+    return max_subexpression
+
+def coefficients(tablica):
+    # Utworzenie pustego zbioru
+    C = set()
+
+    # Przechodzenie przez wszystkie elementy w tablicy
+    for element in tablica:
+        # Dodanie elementu do zbioru (jeżeli element już jest w zbiorze, to nie zostanie dodany ponownie)
+        C.add(element)
+
+    # Zwrócenie listy unikalnych elementów
+    return list(C)
+
+
+# Testujemy funkcję
+# rownania = ['a', 'b', 'a', 'c', 'b', 'd', 'e', 'f', 'f']
+# print(coefficients(rownania))
+
+# Testujemy funkcję
+# print(joint_subexpression(['1', '0', '1', '1', '1', '0', '1'], ['1', '1', '0', '1', '1']))
+
+# hex_number = '0000'
+# binary_number = hex_to_binary(hex_number)
+# print(binary_number)
 
 """""
         uproszczona procedura testu
@@ -133,35 +232,35 @@ liczba0 = 31910012456
 liczba1 = 44309669216255
 liczba2 = 1095546312524
 
-TOLL = TollAlgorithm
+# liczba_hex = "%0.14X" % liczba1  # string
 
-liczba_hex = "%0.14X" % liczba1  # string
+# tablica_bin = TOLL.string_to_binary(liczba_hex, "hex")  # list
+#
+# liczba_bin = TOLL.array_to_string(tablica_bin, "bin")  # string
+# liczba_dec = TOLL.array_to_string(tablica_bin, "dec")  # string
+# equation = TOLL.hex_to_coefficients(liczba_hex)
+# print('=========================================')
+# print('dlugosc liczby w bitach:', len(liczba_bin))
+# print()
+# print('liczba hex:', liczba_hex)
+# print('typ struktury:', type(liczba_hex))
+# print()
+# print('liczba dec:', liczba_dec)
+# print('typ struktury:', type(liczba_dec))
+# print()
+# print('liczba dec:', liczba_bin)
+# print('typ struktury:', type(liczba_bin))
+# print()
+# print('tablica binarna do operacji shift:', tablica_bin)
+# print('typ struktury:', type(tablica_bin))
+# print()
+# print('rownanie:', equation)
+# print('typ struktury:', type(equation))
+# print()
+# print('2, 4 i 6 blok liczby w dec:')
+# print(equation[1], equation[3], equation[5])
 
-tablica_bin = TOLL.string_to_binary(liczba_hex, "hex")  # list
 
-liczba_bin = TOLL.array_to_string(tablica_bin, "bin")  # string
-liczba_dec = TOLL.array_to_string(tablica_bin, "dec")  # string
-equation = TOLL.hex_to_coefficients(liczba_hex)
-print('=========================================')
-print('dlugosc liczby w bitach:', len(liczba_bin))
-print()
-print('liczba hex:', liczba_hex)
-print('typ struktury:', type(liczba_hex))
-print()
-print('liczba dec:', liczba_dec)
-print('typ struktury:', type(liczba_dec))
-print()
-print('liczba dec:', liczba_bin)
-print('typ struktury:', type(liczba_bin))
-print()
-print('tablica binarna do operacji shift:', tablica_bin)
-print('typ struktury:', type(tablica_bin))
-print()
-print('rownanie:', equation)
-print('typ struktury:', type(equation))
-print()
-print('2, 4 i 6 blok liczby w dec:')
-print(equation[1], equation[3], equation[5])
 # rownania = hex_na_rownania(liczba_hex)
 # print(str(liczba_hex))
 # TollAlgorithnm.rownania = TollAlgorithnm.hex_to_coefficients(liczba_hex)
