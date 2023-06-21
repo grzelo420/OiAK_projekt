@@ -114,7 +114,7 @@ class TollAlgorithm:
         return equations
 
     @staticmethod
-    def CSD(array):
+    def CSE(array):
         array_length = len(array)
         tabaddsub = []  # [i][1] tablica na dodaj/odejmij [i][2] tablica na shifts
         tabshift = []
@@ -129,7 +129,7 @@ class TollAlgorithm:
                     i += 1
                 elif i + 1 < len(array) and array[i + 1] == 1:
                     tabaddsub.append(1)
-                    tabshift.append(array_length - i + 1)
+                    tabshift.append(array_length - i + 1)  # + 1
                     while i + 1 < len(array) and array[i + 1] == 1:
                         i += 1
                     tabaddsub.append(-1)
@@ -147,25 +147,51 @@ class TollAlgorithm:
     @staticmethod
     def printCSD(przesuniecia, dodajodejmij):
 
-        iterator = 0
-        while iterator < len(przesuniecia):
+        for i in range(2 * len(przesuniecia) - 2):
+            print("(", end="")
+        print("", dodajodejmij[0], "<<", przesuniecia[0] - przesuniecia[1], end=" ) ")
+        iterator = 1
+        while iterator < len(przesuniecia) - 1:
             if iterator > 0:
-                print("+", end=" ")
-            print("(", dodajodejmij[iterator], "<<", przesuniecia[iterator], end=" ) ")
-            iterator += 1
+                if dodajodejmij[iterator] == 1:
+                    print("+", end="")
+                else:
+                    print("-", end="")
+            if przesuniecia[iterator + 1] != 0:
+                print("", 1, ") <<", przesuniecia[iterator] - przesuniecia[iterator + 1], end=" ) ")
+                iterator += 1
+            else:
+                print("", 1, ") <<", przesuniecia[iterator] - przesuniecia[iterator + 1] - 1, end=" ) ")
+                iterator += 1
+        if dodajodejmij[iterator] == 1:
+            print("+", end="")
+        else:
+            print("-", end="")
+        if przesuniecia[len(przesuniecia) - 1] != 0:
+            if (przesuniecia[len(przesuniecia) - 1] - 1) != 0:
+                print("", 1, ") <<", przesuniecia[len(przesuniecia) - 1] - 1, end="")
+            else:
+                print("", 1, end="")
+        else:
+            print("", 1, end="")
         print()
 
 
 TOLL = TollAlgorithm
-
-
-tabshift, tabaddsub = TOLL.CSD([1, 0, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 0])
+print(12)
+tabshift, tabaddsub = TOLL.CSE([0, 0, 0, 0, 1, 1, 0, 0])
 TOLL.printCSD(tabshift, tabaddsub)
-tabshift, tabaddsub = TOLL.CSD([1, 1, 0, 1, 1, 0, 0, 1])
+print(57)
+tabshift, tabaddsub = TOLL.CSE([0, 0, 1, 1, 1, 0, 0, 1])
 TOLL.printCSD(tabshift, tabaddsub)
-tabshift, tabaddsub = TOLL.CSD([1, 0, 1, 1, 1, 0, 0, 1])
+print(164)
+tabshift, tabaddsub = TOLL.CSE([1, 0, 1, 0, 0, 1, 0, 0])
 TOLL.printCSD(tabshift, tabaddsub)
-tabshift, tabaddsub = TOLL.CSD([1, 0, 1, 0, 0, 0, 0, 1])
+print(195)
+tabshift, tabaddsub = TOLL.CSE([1, 1, 0, 0, 0, 0, 1, 1])
+TOLL.printCSD(tabshift, tabaddsub)
+print(228)
+tabshift, tabaddsub = TOLL.CSE([1, 1, 1, 0, 0, 1, 0, 0])
 TOLL.printCSD(tabshift, tabaddsub)
 
 
@@ -199,6 +225,7 @@ def common_subexpression(bin1, bin2):
 
     # Zwracamy wynik jako listę
     return max_subexpression
+
 
 def coefficients(tablica):
     # Utworzenie pustego zbioru
